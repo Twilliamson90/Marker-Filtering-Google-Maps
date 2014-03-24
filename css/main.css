@@ -31,20 +31,6 @@ h1 {
   width: 95%;
   height: 600px;
 }
-#close {
-  background-color: #fefefe;
-  border: 1px solid #777;
-  border-radius: 3px;
-  box-shadow: 1px 1px 2px #888;
-  color: #222;
-  left: 46.5%;
-  padding: 10px 3%;
-  position: relative;
-  text-decoration: none;
-  top: 2.5em;
-  visibility: hidden;
-  z-index: 2;
-}
 .filter-container-lg {
 	display: none;
 }
@@ -194,7 +180,6 @@ h1 {
 	.filter-container-lg > div {
 	  border: 1px solid #ccc;
 	  box-shadow: 0px 0px 3px #bbb;
-	  margin: 20px 0 0;
 	  width: 90%;
 	}
 	.filter-container-sm {
