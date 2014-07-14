@@ -7,127 +7,73 @@
     <meta charset="utf-8">
     <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400' rel='stylesheet' type='text/css'>
     <link href='./css/main.css' rel='stylesheet' type='text/css'>
-    <link href='./css/menu.css' rel='stylesheet' type='text/css'>
   </head>
   
   <body>
 	<div id="st-container" class="st-container">
-	
-		<nav class="st-menu st-effect-2" id="menu-2">
-			<div class="filter-container-sm">
-				<div>
-					<div class="filter-options">
-						<h2>Filter</h2>
-						<div class="filter-set" style="margin-top:0;">
-							<button id="load-btn" class="load-btn button is-success">Reload data</button>
-						</div>
-						<div class="filter-set">
-							<label for="followers-select">Followers:</label>
-							<select name="followers-select" id="followers-select" class="followers-select">
-								<option value="0">Any</option>
-								<option value="10">10+</option>
-								<option value="20">20+</option>
-								<option value="30">30+</option>
-								<option value="40">40+</option>
-								<option value="50">50+</option>
-								<option value="60">60+</option>
-								<option value="70">70+</option>
-							</select>
-						</div>
-						<div class="filter-set">
-							<label for="college-select">College:</label>
-							<select name="college-select" id="college-select" class="college-select">
-								<option value="0">Any</option>
-								<option value="MSU">Michigan State University</option>
-								<option value="CMU">Central Michigan University</option>
-								<option value="MTU">Michigan Tech University</option>
-								<option value="FSU">Ferris State University</option>
-								<option value="UM">University of Michigan</option>
-							</select>
-						</div>
-						<div class="filter-set">
-							<label for="from-select">From:</label>
-							<select name="from-select" id="from-select" class="from-select">
-								<option value="0">Any</option>
-								<option value="National">National</option>
-								<option value="Michigan">Michigan</option>
-							</select>
-						</div>
-					</div> <!-- .filter-options -->
-				</div> 
-			</div> <!-- .filter-container-sm -->
-		</nav>
 		
-		<div class="st-pusher">
-			<div class="outer-container">
-				<h1>JavaScript Marker Filtering</h1>
-				<div class="inner-container cf">
-					<div id="st-trigger-effects">
-						<button class="button is-default" data-effect="st-effect-2">Filter</button>
-					</div>
-					<div class="map-container">
-						<div id="map-canvas"></div>
-					</div>
-					
-					<div class="filter-container-lg">
-						<div>
-							<h2>Filter</h2>
-							<div class="filter-options">
-								<div class="filter-set" style="margin-top:0;">
-									<button id="load-btn" class="load-btn button is-success">Reload data</button>
-								</div>
-								<div class="filter-set">
-									<label for="followers-select">Followers:</label>
-									<select name="followers-select" id="followers-select" class="followers-select">
-										<option value="0">Any</option>
-										<option value="10">10+</option>
-										<option value="20">20+</option>
-										<option value="30">30+</option>
-										<option value="40">40+</option>
-										<option value="50">50+</option>
-										<option value="60">60+</option>
-										<option value="70">70+</option>
-									</select>
-								</div>
-								<div class="filter-set">
-									<label for="college-select">College:</label>
-									<select name="college-select" id="college-select" class="college-select">
-										<option value="0">Any</option>
-										<option value="MSU">Michigan State University</option>
-										<option value="CMU">Central Michigan University</option>
-										<option value="MTU">Michigan Tech University</option>
-										<option value="FSU">Ferris State University</option>
-										<option value="UM">University of Michigan</option>
-									</select>
-								</div>
-								<div class="filter-set">
-									<label for="from-select">From:</label>
-									<select name="from-select" id="from-select" class="from-select">
-										<option value="0">Any</option>
-										<option value="National">National</option>
-										<option value="Michigan">Michigan</option>
-									</select>
-								</div>
-							</div> <!-- .filter-options -->
-						</div> 
-					</div> <!-- .filter-container-lg -->
-					
-					<div id="status"></div>
-				</div> <!-- .inner-container -->
-			</div> <!-- .outer-container -->
+		<div class="outer-container">
+			<h1>JavaScript Marker Filtering</h1>
+			<div class="inner-container cf">
+				<div class="map-container">
+					<div id="map-canvas"></div>
+				</div>
+				
+				<div class="filter-container-lg">
+					<div>
+						<h2>Filter</h2>
+						<div class="filter-options">
+							<div class="filter-set" style="margin-top:0;">
+								<button id="load-btn" class="load-btn button is-success">Reload data</button>
+							</div>
+							<div class="filter-set">
+								<label for="followers-select">Followers:</label>
+								<select name="followers-select" id="followers-select" class="followers-select">
+									<option value="0">Any</option>
+									<option value="10">10+</option>
+									<option value="20">20+</option>
+									<option value="30">30+</option>
+									<option value="40">40+</option>
+									<option value="50">50+</option>
+									<option value="60">60+</option>
+									<option value="70">70+</option>
+								</select>
+							</div>
+							<div class="filter-set">
+								<label for="college-select">College:</label>
+								<select name="college-select" id="college-select" class="college-select">
+									<option value="0">Any</option>
+									<option value="MSU">Michigan State University</option>
+									<option value="CMU">Central Michigan University</option>
+									<option value="MTU">Michigan Tech University</option>
+									<option value="FSU">Ferris State University</option>
+									<option value="UM">University of Michigan</option>
+								</select>
+							</div>
+							<div class="filter-set">
+								<label for="from-select">From:</label>
+								<select name="from-select" id="from-select" class="from-select">
+									<option value="0">Any</option>
+									<option value="National">National</option>
+									<option value="Michigan">Michigan</option>
+								</select>
+							</div>
+						</div> <!-- .filter-options -->
+					</div> 
+				</div> <!-- .filter-container-lg -->
+				
+				<div id="status"></div>
+			</div> <!-- .inner-container -->
+		</div> <!-- .outer-container -->
 			
-		</div> <!-- .st-pusher -->
 	</div> <!-- #st-container -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="js/vendor/jquery-2.0.3.min.js"><\/script>')</script>
     
     <script src="https://maps.googleapis.com/maps/api/js?libraries=geometry&sensor=false"></script>
-	
-	<script src="js/classie.js"></script>
 
     <script src="js/data.js"></script>
     <script src="js/main.js"></script>
-	<script src="js/menu.js"></script>
 
   </body>
 </html>

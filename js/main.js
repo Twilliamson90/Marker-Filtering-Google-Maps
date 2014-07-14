@@ -1,6 +1,3 @@
-// revealing module pattern
-// http://addyosmani.com/resources/essentialjsdesignpatterns/book/#revealingmodulepatternjavascript
-
 var myMap = function() {
 
 	var	options = {
@@ -9,35 +6,35 @@ var myMap = function() {
 		mapTypeId: google.maps.MapTypeId.ROADMAP
 	}
 
-	// :: Public Function ::
-	function init(mapId) {
-		map = new google.maps.Map(document.getElementById(mapId), options);
-		loadPersonMarkers();
+	function init( settings ) {
+		//console.log(settings);
+		map = new google.maps.Map(document.getElementById( settings.idSelector ), options);
+		markerLocation = settings.markerLocation;
+		loadMarkers();
 	}
 
 	/*
 		== MARKERS ==
 	*/
+	markers = {};
+	markerList = [];
 
-	var markers = {}; // this needs to be moved later, maybe a setup object
-	var markerList = [];
-
-	// :: Public Function ::
-	function loadPersonMarkers(person) {
+	function loadMarkers(person) {
 
 		// optional argument of person
-		var person = typeof person !== 'undefined' ? person : personData;
+		var people = ( typeof person !== 'undefined' ) ? person : personData;
 
 		var j = 1; // for lorempixel
 
-		for( i=0; i < person.length; i++ ) {
+		for( i=0; i < people.length; i++ ) {
+			var person = people[i];
 
 			// if its already on the map, dont put it there again
-			if( markerList.indexOf(person[i].id) !== -1 ) continue;
+			if( markerList.indexOf(person.id) !== -1 ) continue;
 
-			var lat = person[i].lat,
-				lng = person[i].lng,
-				markerId = person[i].id;
+			var lat = person.lat,
+				lng = person.lng,
+				markerId = person.id;
 
 			var infoWindow = new google.maps.InfoWindow({
 				maxWidth: 400
@@ -45,20 +42,19 @@ var myMap = function() {
 
 			var marker = new google.maps.Marker({
 				position: new google.maps.LatLng( lat, lng ),
-				title: person[i].name,
+				title: person.name,
 				markerId: markerId,
-				icon: 'img/red-fat-marker.png',
+				icon: markerLocation,
 				map: map
 			});
 
 			markers[markerId] = marker;
-			markerList.push(person[i].id);
+			markerList.push(person.id);
 
 			if( j > 10 ) j = 1; //temp for lorempixel
 			var content = ['<div class="iw"><img src="http://lorempixel.com/90/90/people/', j, '" width="90" height="90">',
-				'<div class="iw-text"><strong>', person[i].name, '</strong><br>Age: ', person[i].age,
-				'<br>Followers: ', person[i].followers, '<br>Job: ', person[i].occupation,
-				'<br>College: ', person[i].college, '</div></div>'].join('');
+				'<div class="iw-text"><strong>', person.name, '</strong><br>Age: ', person.age,
+				'<br>Followers: ', person.followers, '<br>College: ', person.college, '</div></div>'].join('');
 			j++; //temp for lorempixel
 			
 			google.maps.event.addListener(marker, 'click', (function (marker, content) {
@@ -99,6 +95,7 @@ var myMap = function() {
 	    return n % 1 === 0;
 	}
 
+	// default all filters off
 	var filter = {
 		followers: 0,
 		college: 0,
@@ -106,44 +103,42 @@ var myMap = function() {
 	}
 	var filterMap;
 
-	// :: Public Function ::
-	function filterCtrl(source, code) {
+	function filterCtrl(filterType, value) {
 		// result array
-		var r = [];
+		var results = [];
 
-		if( isInt(code) ) {
-			filter[source] = parseInt(code);
+		if( isInt(value) ) {
+			filter[filterType] = parseInt(value);
 		} else {
-			filter[source] = code;
+			filter[filterType] = value;
 		}
-
-		// console.log(filter);
 		
 		for( k in filter ) {
 			if( !filter.hasOwnProperty(k) && !( filter[k] !== 0 ) ) {
 				// all the filters are off
-				loadPersonMarkers();
+				loadMarkers();
 				return false;
 			} else if ( filter[k] !== 0 ) {
-				// append to r array and call the appropriate filterMap function
-				r.push( filterMap[k]( filter[k] ) ); // bad-ass
+				// call filterMap function and append to r array
+				results.push( filterMap[k]( filter[k] ) );
 			} else {
 				// console.log(k); // fail silently
 			}
 		}
 
-		if( filter[source] === 0 ) r.push( personData );
+		if( filter[filterType] === 0 ) results.push( personData );
 		
-		// console.log(r);
-		
-		if( r.length === 1 ) {
-			r = r[0];
+		/*
+			if there is 1 array (1 filter applied) set it,
+			otherwise find markers that are common to every results array (included in every filter)
+		*/
+		if( results.length === 1 ) {
+			results = results[0];
 		} else {
-			r = reduceArray( r );
+			results = reduceArray( results );
 		}
 		
-		// console.log(r);
-		loadPersonMarkers( r );
+		loadMarkers( results );
 
 	}
 	
@@ -152,52 +147,46 @@ var myMap = function() {
 		keys in the filter variable.
 	*/
 	filterMap = {
-		followers: function( code ) {
-			var people = [];
-
-			if( code === 0 ) return personData;
-
-			for( i=0; i < personData.length; i++ ) {
-				if( personData[i].followers > code ) {
-					people.push( personData[i] )
-				} else {
-					removePersonMarker( personData[i].id );
-				}
-			}
-			return people;
+		followers: function( value ) {
+			return filterIntsLessThan('followers', value);
 		},
 		
-		college: function( code ) {
-			var people = [];
-			
-			if( code === 0 ) return personData;
-			
-			for( i=0; i < personData.length; i++ ) {
-				if( personData[i].college == code ) {
-					people.push( personData[i] );
-				} else {
-					removePersonMarker( personData[i].id );
-				}
-			}
-			return people;
+		college: function( value ) {
+			return filterByString('college', value);
 		},
 
-		from: function( code ) {
-			var people = [];
-			
-			if( code === 0 ) return personData;
-			
-			for( i=0; i < personData.length; i++ ) {
-				if( personData[i].from == code ) {
-					people.push( personData[i] );
-				} else {
-					removePersonMarker( personData[i].id );
-				}
-			}
-			// console.log(people);
-			return people;
+		from: function( value ) {
+			return filterByString('from', value);
 		}
 	} // filterMap
+
+	function filterByString( dataProperty, value ) {
+		var people = [];
+
+		for( var i=0; i < personData.length; i++ ) {
+			var person = personData[i];
+			if( person[dataProperty] == value ) {
+				people.push( person );
+			} else {
+				removePersonMarker( person.id );
+			}
+		}
+		return people;
+	} // filterByString()
+
+	function filterIntsLessThan( dataProperty, value ) {
+			var people = [];
+
+			for( var i=0; i < personData.length; i++ ) {
+				var person = personData[i];
+				if( person[dataProperty] > value ) {
+					people.push( person )
+				} else {
+					removePersonMarker( person.id );
+				}
+			}
+			return people;
+	} // filterIntsLessThan()
 
 	// :: Public Function ::
 	function resetFilter() {
@@ -210,7 +199,7 @@ var myMap = function() {
 
 	return {
 		init: init,
-		getPeople: loadPersonMarkers,
+		loadMarkers: loadMarkers,
 		filterCtrl: filterCtrl,
 		resetFilter: resetFilter
 	};
@@ -219,15 +208,19 @@ var myMap = function() {
 
 $(function() {
 
-	// takes ID of map in document
-	myMap.init('map-canvas');
+	var mapConfig = {
+		idSelector: 'map-canvas',
+		markerLocation: 'img/red-fat-marker.png'
+	}
+
+	myMap.init( mapConfig );
 
 	$('.load-btn').on('click', function() {
 		var $this = $(this);
 		// reset everything
 		$('select').val(0);
 		myMap.resetFilter();
-		myMap.getPeople();
+		myMap.loadMarkers();
 
 		if( $this.hasClass('is-success') ) {
 			$this.removeClass('is-success').addClass('is-default');

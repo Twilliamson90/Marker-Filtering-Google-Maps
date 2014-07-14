@@ -31,9 +31,6 @@ h1 {
   width: 95%;
   height: 600px;
 }
-.filter-container-lg {
-	display: none;
-}
 .filter-container-lg h2 {
   border-bottom: 1px solid #cfcfcf;
   margin: 0 0 10px;
@@ -153,6 +150,7 @@ h1 {
   background-color: #27a2cf;
 }
 
+/* Clearfix */
 .cf:before,
 .cf:after {
     content: " "; /* 1 */
@@ -183,9 +181,6 @@ h1 {
 	  width: 90%;
 	}
 	.filter-container-sm {
-		display: none;
-	}
-	#st-trigger-effects {
 		display: none;
 	}
 }
