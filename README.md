@@ -1,12 +1,12 @@
 # Marker-Filtering-Google-Maps
 
+**Javascript marker filtering for Google Maps**
+
+## About
+
+This is a project that uses JavaScript to add and remove markers from a Google Map based upon multiple stacked filters. jQuery is not a requirement it is only used to listen for clicks and changes to the selectbox.
+
 ### <a href="http://labs.traviswilliamson.me/Marker-Filtering-Google-Maps/">Demo</a>
-
-**Performant client side marker filtering for Google Maps**
-
-Wish that you could have a fast filtering system for markers on Google Maps? You've come to the right place!
-
-The magic happens in main.js
 
 ## Tech
 - [jQuery](http://jquery.com/)
