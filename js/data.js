@@ -1,12 +1,14 @@
 /*
-    Generated JSON data from http://www.json-generator.com/
+    * The marker data will need to match this structre to work
+    * To filter upon a specific key it needs to be hooked up in the filter section
+        of the myMap object
+
+    This data was generated from http://www.json-generator.com/
     
 
-    Source for generating JSON
-    - Two separate entries because of the different lat-lngs
-
-    1.
-
+    Here is the source for generating the JSON
+    
+    // start
     [
         '{{repeat(150)}}',
         {
@@ -24,28 +26,7 @@
             lng: '{{numeric(-120.629883, -77.387695)}}'
         }
     ]
-
-    2.
-
-    [
-        '{{repeat(300)}}',
-        {
-            id: function(tags, idx) {
-                return idx+150;
-            },
-            name: '{{firstName}} {{surname}}',
-            age: '{{numeric(20,85)}}',
-            followers: '{{numeric(8,80)}}',
-            occupation: '{{lorem(2)}}',
-            from: 'National',
-            college: function(idx) {
-                var choices = ['MSU', 'MTU', 'UM', 'CMU', 'FSU'];
-                return choices[this.numeric(0, choices.length - 1)];
-            },
-            lat: '{{numeric(41.846931, 43.600035)}}',
-            lng: '{{numeric(-86.160278, -83.416443)}}'
-        }
-    ]
+    // finish
 
 */
 var personData = [

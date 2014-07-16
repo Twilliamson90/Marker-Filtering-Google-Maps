@@ -6,23 +6,34 @@ var myMap = function() {
 		mapTypeId: google.maps.MapTypeId.ROADMAP
 	}
 
-	function init( settings ) {
-		//console.log(settings);
+	/*
+		Load the map then markers
+		@param object settings (configuration options for map)
+		@return undefined
+	*/
+	function init(settings) {
 		map = new google.maps.Map(document.getElementById( settings.idSelector ), options);
 		markerLocation = settings.markerLocation;
 		loadMarkers();
 	}
 
 	/*
-		== MARKERS ==
+		=======
+		MARKERS
+		=======
 	*/
 	markers = {};
 	markerList = [];
 
-	function loadMarkers(person) {
+	/*
+		Load markers onto the Google Map from a provided array or demo personData (data.js)
+		@param array personList [optional] (list of people to load)
+		@return undefined
+	*/
+	function loadMarkers(personList) {
 
 		// optional argument of person
-		var people = ( typeof person !== 'undefined' ) ? person : personData;
+		var people = ( typeof personList !== 'undefined' ) ? personList : personData;
 
 		var j = 1; // for lorempixel
 
@@ -51,11 +62,12 @@ var myMap = function() {
 			markers[markerId] = marker;
 			markerList.push(person.id);
 
-			if( j > 10 ) j = 1; //temp for lorempixel
-			var content = ['<div class="iw"><img src="http://lorempixel.com/90/90/people/', j, '" width="90" height="90">',
-				'<div class="iw-text"><strong>', person.name, '</strong><br>Age: ', person.age,
-				'<br>Followers: ', person.followers, '<br>College: ', person.college, '</div></div>'].join('');
-			j++; //temp for lorempixel
+			if( j > 10 ) j = 1; // for lorempixel, the thumbnail image
+			var content = ['<div class="iw"><img src="http://lorempixel.com/90/90/people/',
+				j, '" width="90" height="90">', '<div class="iw-text"><strong>', person.name,
+				'</strong><br>Age: ', person.age, '<br>Followers: ', person.followers,
+				'<br>College: ', person.college, '</div></div>'].join('');
+			j++; // lorempixel
 			
 			google.maps.event.addListener(marker, 'click', (function (marker, content) {
 				return function() {
@@ -66,6 +78,11 @@ var myMap = function() {
 		}
 	}
 
+	/*
+		Remove marker from map and our list of current markers
+		@param int id (id of the marker element)
+		@return undefined
+	*/
 	function removePersonMarker(id) {
 		if( markers[id] ) {
 			markers[id].setMap(null);
@@ -76,11 +93,24 @@ var myMap = function() {
 	}
 
 	/*
-		== FILTER ==
+		======
+		FILTER
+		======
 	*/
 
-	// Args: Array (of arrays)
-	// Returns: Array (common elements from all arrays)
+	// default all filters off
+	var filter = {
+		followers: 0,
+		college: 0,
+		from: 0
+	}
+	var filterMap;
+
+	/*
+		Helper function
+		@param array a (array of arrays)
+		@return array (common elements from all arrays)
+	*/
 	function reduceArray(a) {
 		r = a.shift().reduce(function(res, v) {
 			if (res.indexOf(v) === -1 && a.every(function(a) {
@@ -91,18 +121,22 @@ var myMap = function() {
 		return r;
 	}
 
+	/*
+		Helper function
+		@param string n
+		@return bool
+	*/
 	function isInt(n) {
 	    return n % 1 === 0;
 	}
 
-	// default all filters off
-	var filter = {
-		followers: 0,
-		college: 0,
-		from: 0
-	}
-	var filterMap;
 
+	/*
+		Decides which filter function to call and stacks all filters together
+		@param string filterType (the property that will be filtered upon)
+		@param string value (selected filter value)
+		@return undefined
+	*/
 	function filterCtrl(filterType, value) {
 		// result array
 		var results = [];
@@ -122,7 +156,7 @@ var myMap = function() {
 				// call filterMap function and append to r array
 				results.push( filterMap[k]( filter[k] ) );
 			} else {
-				// console.log(k); // fail silently
+				// fail silently
 			}
 		}
 
@@ -130,7 +164,7 @@ var myMap = function() {
 		
 		/*
 			if there is 1 array (1 filter applied) set it,
-			otherwise find markers that are common to every results array (included in every filter)
+			else find markers that are common to every results array (pass every filter)
 		*/
 		if( results.length === 1 ) {
 			results = results[0];
@@ -143,8 +177,7 @@ var myMap = function() {
 	}
 	
 	/* 
-		The keys in this need to be mapped 1-to-1 with the
-		keys in the filter variable.
+		The keys in this need to be mapped 1-to-1 with the keys in the filter variable.
 	*/
 	filterMap = {
 		followers: function( value ) {
@@ -158,8 +191,14 @@ var myMap = function() {
 		from: function( value ) {
 			return filterByString('from', value);
 		}
-	} // filterMap
+	}
 
+	/*
+		Filters marker data based upon a string match
+		@param string dataProperty (the key that will be filtered upon)
+		@param string value (selected filter value)
+		@return array (people that made it through the filter)
+	*/
 	function filterByString( dataProperty, value ) {
 		var people = [];
 
@@ -172,8 +211,14 @@ var myMap = function() {
 			}
 		}
 		return people;
-	} // filterByString()
+	}
 
+	/*
+		Filters out integers that are under the provided value
+		@param string dataProperty (the key that will be filtered upon)
+		@param int value (selected filter value)
+		@return array (people that made it through the filter)
+	*/
 	function filterIntsLessThan( dataProperty, value ) {
 			var people = [];
 
@@ -186,9 +231,9 @@ var myMap = function() {
 				}
 			}
 			return people;
-	} // filterIntsLessThan()
+	}
 
-	// :: Public Function ::
+	// Takes all the filters off
 	function resetFilter() {
 		filter = {
 			followers: 0,
