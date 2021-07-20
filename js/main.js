@@ -69,7 +69,7 @@ var myMap = function() {
 				'<br>College: ', person.college, '</div></div>'].join('');
 			j++; // lorempixel
 			
-			google.maps.event.addListener(marker, 'click', (function (marker, content) {
+			google.maps.event.addListener(marker, 'mouserover', (function (marker, content) {
 				return function() {
 					infoWindow.setContent(content);
 					infoWindow.open(map, marker);
